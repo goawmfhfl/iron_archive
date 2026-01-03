@@ -19,7 +19,7 @@ export function ContentCard({ content, className }: ContentCardProps) {
   });
 
   return (
-    <Link href={`/contents/${content.id}`}>
+    <Link href={`/contents/${content.id}`} className="block w-full">
       <Card
         elevation={1}
         className={cn(

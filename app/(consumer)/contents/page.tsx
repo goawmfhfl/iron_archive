@@ -24,7 +24,7 @@ export default function ContentsPage() {
             <h1 className="text-3xl font-bold text-text-primary mb-2">컨텐츠</h1>
             <p className="text-text-secondary">유익한 인사이트를 발견하세요</p>
           </div>
-          <div className="space-y-6">
+          <div className="flex flex-col gap-10">
             {[...Array(6)].map((_, i) => (
               <Card key={i} elevation={1}>
                 <div className="flex flex-col sm:flex-row">
@@ -98,7 +98,7 @@ export default function ContentsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-6">
+          <div className="flex flex-col gap-10">
             {openContents.map((content) => (
               <ContentCard key={content.id} content={content} />
             ))}

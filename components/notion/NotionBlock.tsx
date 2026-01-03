@@ -22,7 +22,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       if (!paragraphText) {
         return (
           <p
-            className="text-base leading-7 mb-4"
+            className="text-base leading-7 mb-2"
             aria-hidden="true"
           >
             {"\u00A0"}
@@ -31,7 +31,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       }
 
       return (
-        <p className="text-base text-text-primary leading-7 mb-4">
+        <p className="text-base text-text-primary leading-7  ">
           {renderRichText(block.paragraph?.rich_text)}
         </p>
       );
@@ -65,14 +65,14 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
     case "bulleted_list_item":
       return (
-        <li className="text-base text-text-primary leading-7 mb-2 ml-6 list-disc">
+        <li className="text-base text-text-primary leading-7 mb-1 ml-6 list-disc">
           {renderRichText(block.bulleted_list_item?.rich_text)}
         </li>
       );
 
     case "numbered_list_item":
       return (
-        <li className="text-base text-text-primary leading-7 mb-2 ml-6 list-decimal">
+        <li className="text-base text-text-primary leading-7 mb-1 ml-6 list-decimal">
           {renderRichText(block.numbered_list_item?.rich_text)}
         </li>
       );
@@ -130,7 +130,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
       return (
         <div className="my-4">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-surface-elevated">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-transparent">
             <Image
               src={imageUrl}
               alt={imageCaption}

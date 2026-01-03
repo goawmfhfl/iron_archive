@@ -39,12 +39,12 @@ export default function ContentDetailPage() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-6">
-            <div className="h-8 bg-surface-elevated rounded animate-pulse w-3/4" />
-            <div className="h-4 bg-surface-elevated rounded animate-pulse w-1/2" />
-            <div className="w-full aspect-[16/9] bg-surface-elevated rounded-lg animate-pulse" />
+            <div className="h-8 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse w-3/4" />
+            <div className="h-4 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse w-1/2" />
+            <div className="w-full aspect-[16/9] bg-surface-hover dark:bg-surface-elevated rounded-lg animate-pulse" />
             <div className="space-y-3">
-              <div className="h-4 bg-surface-elevated rounded animate-pulse" />
-              <div className="h-4 bg-surface-elevated rounded animate-pulse w-5/6" />
+              <div className="h-4 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse" />
+              <div className="h-4 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse w-5/6" />
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function ContentDetailPage() {
 
         {/* 썸네일 */}
         {content.thumbnail_url && (
-          <div className="relative w-full aspect-[16/9] mb-8 rounded-lg overflow-hidden bg-surface-elevated">
+          <div className="relative w-full aspect-[16/9] mb-8 rounded-lg overflow-hidden bg-transparent">
             <Image
               src={content.thumbnail_url}
               alt={content.title}
@@ -119,8 +119,8 @@ export default function ContentDetailPage() {
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="space-y-2">
-                <div className="h-4 bg-surface-elevated rounded animate-pulse" />
-                <div className="h-4 bg-surface-elevated rounded animate-pulse w-5/6" />
+                <div className="h-4 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse" />
+                <div className="h-4 bg-surface-hover dark:bg-surface-elevated rounded animate-pulse w-5/6" />
               </div>
             ))}
           </div>
@@ -146,13 +146,6 @@ export default function ContentDetailPage() {
 
         {notionQuery.isSuccess && notionQuery.data && (
           <div className="prose prose-sm max-w-none dark:prose-invert">
-            {notionQuery.data.title && (
-              <h2 className="text-2xl font-bold text-text-primary mb-6 leading-tight">
-                <span className="box-decoration-clone bg-background-secondary/70 dark:bg-background-secondary/30 px-2 py-1 rounded-md">
-                  {notionQuery.data.title}
-                </span>
-              </h2>
-            )}
             <NotionRenderer blocks={notionQuery.data.blocks || []} />
           </div>
         )}
