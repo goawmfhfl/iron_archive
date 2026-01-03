@@ -15,7 +15,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "bg-surface rounded-lg border border-surface-elevated",
+        "bg-surface rounded-lg border border-border",
         `shadow-elevation-${elevation}`,
         className
       )}

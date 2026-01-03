@@ -102,11 +102,13 @@ export default function ContentDetailPage() {
 
         {/* 제목 및 설명 */}
         <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-4">
-            {content.title}
+          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-4 leading-tight">
+            <span className="box-decoration-clone bg-background-secondary/80 dark:bg-background-secondary/35 px-3 py-2 rounded-lg">
+              {content.title}
+            </span>
           </h1>
           {content.description && (
-            <p className="text-lg text-text-secondary leading-normal">
+            <p className="text-lg text-text-secondary leading-7">
               {content.description}
             </p>
           )}
@@ -145,8 +147,10 @@ export default function ContentDetailPage() {
         {notionQuery.isSuccess && notionQuery.data && (
           <div className="prose prose-sm max-w-none dark:prose-invert">
             {notionQuery.data.title && (
-              <h2 className="text-2xl font-bold text-text-primary mb-6">
-                {notionQuery.data.title}
+              <h2 className="text-2xl font-bold text-text-primary mb-6 leading-tight">
+                <span className="box-decoration-clone bg-background-secondary/70 dark:bg-background-secondary/30 px-2 py-1 rounded-md">
+                  {notionQuery.data.title}
+                </span>
               </h2>
             )}
             <NotionRenderer blocks={notionQuery.data.blocks || []} />

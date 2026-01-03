@@ -149,7 +149,7 @@ export function PromoCallout({ block }: { block: NotionBlock }) {
   return (
     <section
       className={[
-        "not-prose my-6 rounded-2xl border border-surface-elevated bg-surface shadow-elevation-2 overflow-hidden",
+        "not-prose my-6 rounded-2xl border border-border bg-surface shadow-elevation-2 overflow-hidden",
         isCardClickable ? "cursor-pointer hover:bg-surface-hover/30 transition-colors" : "",
       ].join(" ")}
       role={isCardClickable ? "link" : undefined}
@@ -180,7 +180,7 @@ export function PromoCallout({ block }: { block: NotionBlock }) {
               {parsed.title ?? "이런 컨텐츠 찾고 있나요?"}
             </h3>
             {parsed.description && (
-              <p className="mt-1 text-sm text-text-secondary whitespace-pre-wrap leading-normal">
+              <p className="mt-1 text-sm text-text-secondary whitespace-pre-wrap leading-7">
                 {parsed.description}
               </p>
             )}
@@ -191,7 +191,7 @@ export function PromoCallout({ block }: { block: NotionBlock }) {
       {/* 이미지 영역 */}
       <div className="px-3 pb-3">
         {parsed.images.length === 0 ? (
-          <div className="rounded-2xl border border-surface-elevated bg-surface-elevated/40 p-6 text-sm text-text-tertiary">
+          <div className="rounded-2xl border border-border bg-surface-elevated/40 p-6 text-sm text-text-tertiary">
             이미지가 없습니다.
           </div>
         ) : parsed.images.length === 1 ? (
@@ -354,7 +354,7 @@ function PromoImageCard({
   if (variant === "single") {
     const content = (
       <div className="group relative flex justify-center items-center">
-        <div className="relative max-w-full rounded-2xl overflow-hidden border border-surface-elevated bg-background shadow-elevation-1">
+        <div className="relative max-w-full rounded-2xl overflow-hidden border border-border bg-background shadow-elevation-1">
           <div className="relative w-full max-w-2xl aspect-[16/9]">
             <Image
               src={image.url}
@@ -428,7 +428,7 @@ function PromoImageCard({
 
   // 캐러셀 이미지는 기존 크기 유지
   const content = (
-    <div className="group relative rounded-2xl overflow-hidden border border-surface-elevated bg-background shadow-elevation-1 shrink-0">
+    <div className="group relative rounded-2xl overflow-hidden border border-border bg-background shadow-elevation-1 shrink-0">
       <div className={["relative overflow-hidden", fixedCarouselSize].join(" ")}>
         <Image
           src={image.url}

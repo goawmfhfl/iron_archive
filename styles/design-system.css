@@ -45,6 +45,7 @@
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
   --color-surface-hover: #f3f4f6;
+  --color-border: #e5e7eb;
 
   /* Text Colors - Light Mode */
   --color-text-primary: #111827;
@@ -124,6 +125,7 @@
   --color-surface: #1e293b;
   --color-surface-elevated: #334155;
   --color-surface-hover: #475569;
+  --color-border: #334155;
 
   /* Text Colors - Dark Mode */
   --color-text-primary: #f8fafc;

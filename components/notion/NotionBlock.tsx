@@ -22,7 +22,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       if (!paragraphText) {
         return (
           <p
-            className="text-base leading-normal mb-4"
+            className="text-base leading-7 mb-4"
             aria-hidden="true"
           >
             {"\u00A0"}
@@ -31,7 +31,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       }
 
       return (
-        <p className="text-base text-text-primary leading-normal mb-4">
+        <p className="text-base text-text-primary leading-7 mb-4">
           {renderRichText(block.paragraph?.rich_text)}
         </p>
       );
@@ -39,34 +39,40 @@ export function NotionBlock({ block }: NotionBlockProps) {
     case "heading_1":
       return (
         <h1 className="text-3xl font-bold text-text-primary mb-4 mt-6 first:mt-0 leading-tight">
-          {renderRichText(block.heading_1?.rich_text)}
+          <span className="box-decoration-clone bg-background-secondary/80 dark:bg-background-secondary/35 px-2 py-1 rounded-md">
+            {renderRichText(block.heading_1?.rich_text)}
+          </span>
         </h1>
       );
 
     case "heading_2":
       return (
         <h2 className="text-2xl font-bold text-text-primary mb-3 mt-5 first:mt-0 leading-tight">
-          {renderRichText(block.heading_2?.rich_text)}
+          <span className="box-decoration-clone bg-background-secondary/80 dark:bg-background-secondary/35 px-2 py-1 rounded-md">
+            {renderRichText(block.heading_2?.rich_text)}
+          </span>
         </h2>
       );
 
     case "heading_3":
       return (
         <h3 className="text-xl font-semibold text-text-primary mb-2 mt-4 first:mt-0 leading-tight">
-          {renderRichText(block.heading_3?.rich_text)}
+          <span className="box-decoration-clone bg-background-secondary/80 dark:bg-background-secondary/35 px-2 py-1 rounded-md">
+            {renderRichText(block.heading_3?.rich_text)}
+          </span>
         </h3>
       );
 
     case "bulleted_list_item":
       return (
-        <li className="text-base text-text-primary leading-normal mb-2 ml-6 list-disc">
+        <li className="text-base text-text-primary leading-7 mb-2 ml-6 list-disc">
           {renderRichText(block.bulleted_list_item?.rich_text)}
         </li>
       );
 
     case "numbered_list_item":
       return (
-        <li className="text-base text-text-primary leading-normal mb-2 ml-6 list-decimal">
+        <li className="text-base text-text-primary leading-7 mb-2 ml-6 list-decimal">
           {renderRichText(block.numbered_list_item?.rich_text)}
         </li>
       );
@@ -92,7 +98,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       const codeText = extractTextFromRichText(block.code?.rich_text);
       const language = block.code?.language || "plain text";
       return (
-        <pre className="bg-surface-elevated border border-surface-elevated rounded-lg p-4 my-4 overflow-x-auto">
+        <pre className="bg-surface-elevated border border-border rounded-lg p-4 my-4 overflow-x-auto">
           <code className="text-sm text-text-primary font-mono">
             {codeText}
           </code>
@@ -124,7 +130,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
       return (
         <div className="my-4">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-surface-elevated bg-surface-elevated">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-surface-elevated">
             <Image
               src={imageUrl}
               alt={imageCaption}
@@ -142,7 +148,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       );
 
     case "divider":
-      return <hr className="my-6 border-surface-elevated" />;
+      return <hr className="my-6 border-border" />;
 
     case "callout":
       // green_background 콜아웃은 "홍보 카드" UI로 커스텀 렌더링
@@ -150,11 +156,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
         return <PromoCallout block={block} />;
       }
       return (
-        <div className="border border-surface-elevated rounded-lg p-4 my-4">
+        <div className="border border-border rounded-lg p-4 my-4">
           {block.callout?.icon && (
             <div className="text-2xl mb-2">{block.callout.icon.emoji}</div>
           )}
-          <div className="text-base text-text-primary leading-normal">
+          <div className="text-base text-text-primary leading-7">
             {block.callout?.rich_text && (
               <p className="mb-2">{renderRichText(block.callout?.rich_text)}</p>
             )}
@@ -193,7 +199,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       return (
         <a
           href={href}
-          className="my-4 flex items-center gap-3 rounded-lg border border-surface-elevated bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
+          className="my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
         >
           <span className="text-xl leading-none">📄</span>
           <span className="font-semibold text-text-primary underline underline-offset-4">
@@ -227,7 +233,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
       return (
         <a
           href={href}
-          className="my-4 flex items-center gap-3 rounded-lg border border-surface-elevated bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
+          className="my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
         >
           <span className="text-xl leading-none">{icon}</span>
           <span className="font-semibold text-text-primary underline underline-offset-4">

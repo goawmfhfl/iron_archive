@@ -51,7 +51,7 @@ export function ContentCard({ content, className }: ContentCardProps) {
                 {content.description}
               </p>
             </div>
-            <div className="flex items-center justify-between text-xs text-text-tertiary pt-2 border-t border-surface-elevated">
+            <div className="flex items-center justify-between text-xs text-text-tertiary pt-2 border-t border-border">
               <span>{formattedDate}</span>
               <span className="text-primary-600 dark:text-primary-400 font-medium group-hover:underline">
                 읽기 →

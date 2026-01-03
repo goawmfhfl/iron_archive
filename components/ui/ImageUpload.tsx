@@ -106,7 +106,7 @@ export function ImageUpload({
             <img
               src={preview}
               alt="Preview"
-              className="w-full h-auto rounded-lg border-2 border-surface-elevated object-cover"
+              className="w-full h-auto rounded-lg border-2 border-border object-cover"
               style={{
                 maxHeight: "400px",
                 aspectRatio: `${expectedWidth}/${expectedHeight}`,
@@ -139,7 +139,7 @@ export function ImageUpload({
               "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
               displayError
                 ? "border-error bg-error-light/10"
-                : "border-surface-elevated hover:border-primary-300"
+                : "border-border hover:border-primary-300"
             )}
           >
             <input

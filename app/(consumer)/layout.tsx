@@ -28,7 +28,7 @@ export default function ConsumerLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b border-surface-elevated bg-surface/80 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-surface/80 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* 로고 및 네비게이션 */}
@@ -126,7 +126,7 @@ export default function ConsumerLayout({
 
           {/* 모바일 메뉴 */}
           {mobileMenuOpen && (
-            <div className="md:hidden border-t border-surface-elevated py-4">
+            <div className="md:hidden border-t border-border py-4">
               <nav className="flex flex-col gap-1">
                 {navItems.map((item) => (
                   <Link
@@ -160,7 +160,7 @@ export default function ConsumerLayout({
         </div>
       </header>
       <main className="w-full">{children}</main>
-      <footer className="border-t border-surface-elevated bg-surface mt-auto">
+      <footer className="border-t border-border bg-surface mt-auto">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <p className="text-center text-sm text-text-secondary">
             © {new Date().getFullYear()} ironArchive. All rights reserved.

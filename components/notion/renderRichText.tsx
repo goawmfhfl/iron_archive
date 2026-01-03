@@ -107,7 +107,7 @@ function annotationsToClasses(a?: NotionAnnotations): string {
     a.underline ? "underline underline-offset-2" : "",
     a.strikethrough ? "line-through" : "",
     a.code
-      ? "font-mono text-[0.95em] bg-surface-elevated border border-surface-elevated px-1 rounded"
+      ? "font-mono text-[0.95em] bg-surface-elevated border border-border px-1 rounded"
       : "",
     colorToClasses(a.color),
   ]

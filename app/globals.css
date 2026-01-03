@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply border-surface-elevated;
+    @apply border-border;
   }
 
   body {
@@ -52,6 +52,16 @@
 
   p {
     @apply text-base leading-7 text-text-primary;
+  }
+
+  /* Notion/Prose 텍스트의 줄바꿈(개행) 간격이 너무 촘촘해 보이는 문제 보정 */
+  .prose p {
+    @apply leading-7;
+  }
+  .prose br {
+    display: block;
+    content: "";
+    margin-top: 0.65rem;
   }
 
   a {

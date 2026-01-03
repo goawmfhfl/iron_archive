@@ -25,7 +25,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             "transition-colors",
             error
               ? "border-error focus:ring-error focus:border-error"
-              : "border-surface-elevated hover:border-primary-300",
+              : "border-border hover:border-primary-300",
             className
           )}
           ref={ref}

@@ -25,7 +25,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 "transition-colors",
                 error
                   ? "border-error focus:ring-error"
-                  : "border-surface-elevated hover:border-primary-300",
+                  : "border-border hover:border-primary-300",
                 className
               )}
               {...props}

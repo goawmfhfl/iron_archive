@@ -60,6 +60,8 @@ const config: Config = {
           elevated: "var(--color-surface-elevated)",
           hover: "var(--color-surface-hover)",
         },
+        // Border color
+        border: "var(--color-border)",
         // Text colors
         text: {
           primary: "var(--color-text-primary)",
