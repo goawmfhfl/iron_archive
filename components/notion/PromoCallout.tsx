@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 
 import type { NotionBlock } from "@/lib/types/notion";
 import { extractTextFromRichText } from "@/lib/services/notion-service";
+import { extractNotionPageId, formatNotionPageId } from "@/lib/utils/notion";
 
 type PromoImage = {
   url: string;
@@ -56,31 +57,20 @@ function findFirstUrl(text: string): string | undefined {
   return raw.replace(/[),.;]+$/, "");
 }
 
-function looksLikeNotionId(value: string): boolean {
-  const v = value.replace(/^\//, "").trim();
-  const uuidWithHyphen =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const hex32 = /^[0-9a-f]{32}$/i;
-  return uuidWithHyphen.test(v) || hex32.test(v);
+function toContentNotionHref(contentId: string, pageId: string): string {
+  return `/contents/${contentId}/notion/${formatNotionPageId(pageId)}`;
 }
 
-function toAppNotionViewerHref(pageUrl: string): string {
-  return `/notion?pageUrl=${encodeURIComponent(pageUrl)}`;
-}
-
-function normalizeClickUrl(url: string): string {
+function normalizeClickUrl(url: string, contentId?: string): string {
   const v = url.trim();
   if (!v) return v;
 
-  // Notion 페이지 URL은 앱의 notion 뷰어로 라우팅
-  if (/^https?:\/\/(www\.)?notion\.so\//i.test(v)) {
-    return toAppNotionViewerHref(v);
-  }
-
-  // Notion 내부 링크(/<pageId>) 또는 pageId 자체면 앱의 notion 뷰어로 라우팅
-  if (looksLikeNotionId(v)) {
-    const asPath = v.startsWith("/") ? v : `/${v}`;
-    return toAppNotionViewerHref(asPath);
+  // 컨텐츠 컨텍스트가 있으면 Notion 링크는 컨텐츠 하위 라우트로 라우팅
+  if (contentId) {
+    const pageId = extractNotionPageId(v);
+    if (pageId) {
+      return toContentNotionHref(contentId, pageId);
+    }
   }
 
   return v;
@@ -189,7 +179,13 @@ function collectBlocksDepthFirst(blocks: NotionBlock[]): NotionBlock[] {
   return collected;
 }
 
-export function PromoCallout({ block }: { block: NotionBlock }) {
+export function PromoCallout({
+  block,
+  contentId,
+}: {
+  block: NotionBlock;
+  contentId?: string;
+}) {
   const router = useRouter();
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
@@ -214,11 +210,13 @@ export function PromoCallout({ block }: { block: NotionBlock }) {
           child.image?.caption && child.image.caption.length > 0
             ? extractTextFromRichText(child.image.caption)
             : "";
-        const captionUrl = captionText ? findFirstUrl(captionText) : undefined;
+        const captionUrl = captionText
+          ? (findFirstUrl(captionText) ?? (extractNotionPageId(captionText) ? captionText.trim() : undefined))
+          : undefined;
 
         images.push({
           url: imgUrl,
-          clickUrl: captionUrl ? normalizeClickUrl(captionUrl) : undefined,
+          clickUrl: captionUrl ? normalizeClickUrl(captionUrl, contentId) : undefined,
           alt: captionText || "promo-image",
         });
         continue;
@@ -226,12 +224,12 @@ export function PromoCallout({ block }: { block: NotionBlock }) {
     }
 
     return { images, meta };
-  }, [block]);
+  }, [block, contentId]);
 
   const layoutType: PromoLayoutType = parsed.meta.layoutType ?? "banner";
   const aspectRatio: PromoAspectRatio = parsed.meta.aspectRatio ?? "vertical";
 
-  const cardHref = parsed.meta.url ? normalizeClickUrl(parsed.meta.url) : undefined;
+  const cardHref = parsed.meta.url ? normalizeClickUrl(parsed.meta.url, contentId) : undefined;
   const isCardClickable = Boolean(cardHref);
 
   return (

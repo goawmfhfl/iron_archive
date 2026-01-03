@@ -146,7 +146,7 @@ export default function ContentDetailPage() {
 
         {notionQuery.isSuccess && notionQuery.data && (
           <div className="prose prose-sm max-w-none dark:prose-invert">
-            <NotionRenderer blocks={notionQuery.data.blocks || []} />
+            <NotionRenderer blocks={notionQuery.data.blocks || []} contentId={id} />
           </div>
         )}
       </div>

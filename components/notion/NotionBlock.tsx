@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { extractTextFromRichText } from "@/lib/services/notion-service";
 import { NotionRenderer } from "./NotionRenderer";
 import { renderRichText } from "./renderRichText";
@@ -10,9 +11,10 @@ import type { NotionBlock } from "@/lib/types/notion";
 
 interface NotionBlockProps {
   block: NotionBlock;
+  contentId?: string;
 }
 
-export function NotionBlock({ block }: NotionBlockProps) {
+export function NotionBlock({ block, contentId }: NotionBlockProps) {
   const { type, id } = block;
 
   switch (type) {
@@ -87,7 +89,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
             {/* 중첩된 children 블록 렌더링 */}
             {block.children && Array.isArray(block.children) && block.children.length > 0 && (
               <div className="mt-2">
-                <NotionRenderer blocks={block.children} />
+                <NotionRenderer blocks={block.children} contentId={contentId} />
               </div>
             )}
           </div>
@@ -153,7 +155,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
     case "callout":
       // green_background 콜아웃은 "홍보 카드" UI로 커스텀 렌더링
       if (block.callout?.color === "green_background") {
-        return <PromoCallout block={block} />;
+        return <PromoCallout block={block} contentId={contentId} />;
       }
       return (
         <div className="border border-border rounded-lg p-4 my-4">
@@ -167,7 +169,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
             {/* 중첩된 children 블록 렌더링 */}
             {block.children && Array.isArray(block.children) && block.children.length > 0 && (
               <div className="mt-2">
-                <NotionRenderer blocks={block.children} />
+                <NotionRenderer blocks={block.children} contentId={contentId} />
               </div>
             )}
           </div>
@@ -183,7 +185,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
           <div className="ml-4 mt-2">
             {/* Toggle 내부 블록 렌더링 */}
             {block.children && Array.isArray(block.children) && block.children.length > 0 && (
-              <NotionRenderer blocks={block.children} />
+              <NotionRenderer blocks={block.children} contentId={contentId} />
             )}
           </div>
         </details>
@@ -194,18 +196,28 @@ export function NotionBlock({ block }: NotionBlockProps) {
       const title = block.child_page?.title ?? "페이지";
       // child_page 블록의 id 자체가 이동해야 할 pageId 입니다.
       const pageId = formatNotionPageId(block.id);
-      const href = `/notion?pageUrl=${encodeURIComponent(`/${pageId}`)}`;
+      const href = contentId ? `/contents/${contentId}/notion/${pageId}` : null;
 
-      return (
-        <a
-          href={href}
-          className="my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
-        >
+      const contentEl = (
+        <>
           <span className="text-xl leading-none">📄</span>
           <span className="font-semibold text-text-primary underline underline-offset-4">
             {title}
           </span>
-        </a>
+        </>
+      );
+
+      const className =
+        "my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors";
+
+      if (!href) {
+        return <div className={className}>{contentEl}</div>;
+      }
+
+      return (
+        <Link href={href} className={className}>
+          {contentEl}
+        </Link>
       );
     }
 
@@ -225,21 +237,30 @@ export function NotionBlock({ block }: NotionBlockProps) {
       }
 
       const pageId = formatNotionPageId(pageIdRaw);
-      const href = `/notion?pageUrl=${encodeURIComponent(`/${pageId}`)}`;
+      const href = contentId ? `/contents/${contentId}/notion/${pageId}` : null;
       const label =
         block.link_to_page?.type === "database_id" ? "데이터베이스" : "페이지";
       const icon = block.link_to_page?.type === "database_id" ? "🗂️" : "📄";
 
-      return (
-        <a
-          href={href}
-          className="my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors"
-        >
+      const className =
+        "my-4 flex items-center gap-3 rounded-lg border border-border bg-surface-elevated/30 px-4 py-3 hover:bg-surface-hover transition-colors";
+      const contentEl = (
+        <>
           <span className="text-xl leading-none">{icon}</span>
           <span className="font-semibold text-text-primary underline underline-offset-4">
             {label}로 이동
           </span>
-        </a>
+        </>
+      );
+
+      if (!href) {
+        return <div className={className}>{contentEl}</div>;
+      }
+
+      return (
+        <Link href={href} className={className}>
+          {contentEl}
+        </Link>
       );
     }
 

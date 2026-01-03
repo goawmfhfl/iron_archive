@@ -1,19 +1,8 @@
-import { Suspense } from "react";
-import NotionViewerClient from "./NotionViewerClient";
+import { notFound } from "next/navigation";
 
 export default function NotionViewerPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-background px-4 py-10">
-          <div className="mx-auto w-full max-w-3xl">
-            <div className="text-text-secondary">로딩 중...</div>
-          </div>
-        </div>
-      }
-    >
-      <NotionViewerClient />
-    </Suspense>
-  );
+  // /notion 라우트는 미사용: 모든 Notion 이동은 /contents/[id]/notion/[pageId]로 처리
+  // 의도치 않은 직접 접근을 404로 처리합니다.
+  notFound();
 }
 

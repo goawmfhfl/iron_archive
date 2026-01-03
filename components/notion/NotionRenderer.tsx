@@ -13,9 +13,14 @@ import type { NotionBlock as NotionBlockType } from "@/lib/types/notion";
 interface NotionRendererProps {
   blocks: NotionBlockType[];
   className?: string;
+  /**
+   * 컨텐츠 상세(/contents/[id]) 컨텍스트에서 Notion 내부 링크를
+   * /contents/[id]/notion/[pageId] 로 라우팅하기 위해 사용합니다.
+   */
+  contentId?: string;
 }
 
-export function NotionRenderer({ blocks, className }: NotionRendererProps) {
+export function NotionRenderer({ blocks, className, contentId }: NotionRendererProps) {
   if (!blocks || blocks.length === 0) {
     return (
       <div className="text-center py-12 text-text-secondary">
@@ -35,7 +40,7 @@ export function NotionRenderer({ blocks, className }: NotionRendererProps) {
         elements.push(
           <ul key={`bullet-${currentBulletList[0].id}`} className="mb-4">
             {currentBulletList.map((block) => (
-              <NotionBlock key={block.id} block={block} />
+              <NotionBlock key={block.id} block={block} contentId={contentId} />
             ))}
           </ul>
         );
@@ -48,7 +53,7 @@ export function NotionRenderer({ blocks, className }: NotionRendererProps) {
         elements.push(
           <ol key={`numbered-${currentNumberedList[0].id}`} className="mb-4">
             {currentNumberedList.map((block) => (
-              <NotionBlock key={block.id} block={block} />
+              <NotionBlock key={block.id} block={block} contentId={contentId} />
             ))}
           </ol>
         );
@@ -67,7 +72,7 @@ export function NotionRenderer({ blocks, className }: NotionRendererProps) {
         // 다른 블록 타입이 나오면 리스트 flush
         flushBulletList();
         flushNumberedList();
-        elements.push(<NotionBlock key={block.id} block={block} />);
+        elements.push(<NotionBlock key={block.id} block={block} contentId={contentId} />);
       }
     });
 
