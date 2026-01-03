@@ -116,21 +116,35 @@ export default function PreviewPage() {
 
               {notionQuery.isError && (
                 <div className="text-center py-12">
-                  <p className="text-error mb-4">
+                  <p className="text-error mb-4 font-semibold">
                     Notion 컨텐츠를 불러올 수 없습니다.
                   </p>
-                  <p className="text-sm text-text-tertiary mb-4">
+                  <p className="text-sm text-text-tertiary mb-2">
                     {notionQuery.error instanceof Error
                       ? notionQuery.error.message
                       : "알 수 없는 오류가 발생했습니다."}
                   </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => notionQuery.refetch()}
-                  >
-                    다시 시도
-                  </Button>
+                  {content.notion_url && (
+                    <p className="text-xs text-text-tertiary mb-4 break-all">
+                      URL: {content.notion_url}
+                    </p>
+                  )}
+                  <div className="flex gap-2 justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => notionQuery.refetch()}
+                    >
+                      다시 시도
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push(`/admin/posts/${id}/edit`)}
+                    >
+                      수정하기
+                    </Button>
+                  </div>
                 </div>
               )}
 

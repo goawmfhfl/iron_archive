@@ -1,7 +1,7 @@
 "use client";
 
 import { extractTextFromRichText } from "@/lib/services/notion-service";
-import type { NotionBlock } from "@/lib/services/notion-service";
+import type { NotionBlock } from "@/lib/types/notion";
 
 interface NotionBlockProps {
   block: NotionBlock;

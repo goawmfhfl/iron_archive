@@ -1,7 +1,7 @@
 "use client";
 
 import { NotionBlock } from "./NotionBlock";
-import type { NotionBlock as NotionBlockType } from "@/lib/services/notion-service";
+import type { NotionBlock as NotionBlockType } from "@/lib/types/notion";
 
 interface NotionRendererProps {
   blocks: NotionBlockType[];
