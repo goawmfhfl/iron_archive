@@ -181,40 +181,51 @@ function flattenBlocks(blocks: NotionBlock[]): NotionBlock[] {
 export async function getNotionPageContent(
   notionUrl: string
 ): Promise<NotionPageContent> {
-  const headers = getNotionHeaders();
+  try {
+    if (!notionUrl || typeof notionUrl !== "string") {
+      throw new Error("유효하지 않은 Notion URL입니다.");
+    }
 
-  // 페이지 ID 추출 및 변환
-  const pageIdRaw = extractNotionPageId(notionUrl);
-  if (!pageIdRaw) {
-    throw new Error("유효하지 않은 Notion URL입니다.");
+    const headers = getNotionHeaders();
+
+    // 페이지 ID 추출 및 변환
+    const pageIdRaw = extractNotionPageId(notionUrl);
+    if (!pageIdRaw) {
+      throw new Error("유효하지 않은 Notion URL입니다.");
+    }
+
+    const pageId = formatNotionPageId(pageIdRaw);
+
+    // 페이지 정보 가져오기
+    const pageResponse = await fetch(`${NOTION_API_BASE}/pages/${pageId}`, {
+      method: "GET",
+      headers,
+      next: { revalidate: 3600 }, // 1시간 캐시
+    });
+
+    if (!pageResponse.ok) {
+      const errorData = await pageResponse.json().catch(() => ({}));
+      console.error("Notion API error:", errorData);
+      throw new Error(
+        `Notion 페이지 조회 실패: ${errorData.message || pageResponse.statusText}`
+      );
+    }
+
+    const page = await pageResponse.json();
+    const title = extractPageTitle(page);
+
+    // 블록들 가져오기
+    const rawBlocks = await fetchPageBlocks(pageId, headers);
+
+    // 블록들을 평탄화하여 순서대로 렌더링 가능하도록 변환
+    const flattenedBlocks = flattenBlocks(rawBlocks);
+
+    return {
+      title,
+      blocks: flattenedBlocks,
+    };
+  } catch (error) {
+    console.error("getNotionPageContent error:", error);
+    throw error;
   }
-
-  const pageId = formatNotionPageId(pageIdRaw);
-
-  // 페이지 정보 가져오기
-  const pageResponse = await fetch(`${NOTION_API_BASE}/pages/${pageId}`, {
-    method: "GET",
-    headers,
-  });
-
-  if (!pageResponse.ok) {
-    const errorData = await pageResponse.json().catch(() => ({}));
-    throw new Error(
-      `Notion 페이지 조회 실패: ${errorData.message || pageResponse.statusText}`
-    );
-  }
-
-  const page = await pageResponse.json();
-  const title = extractPageTitle(page);
-
-  // 블록들 가져오기
-  const rawBlocks = await fetchPageBlocks(pageId, headers);
-
-  // 블록들을 평탄화하여 순서대로 렌더링 가능하도록 변환
-  const flattenedBlocks = flattenBlocks(rawBlocks);
-
-  return {
-    title,
-    blocks: flattenedBlocks,
-  };
 }

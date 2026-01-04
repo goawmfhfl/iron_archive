@@ -14,22 +14,36 @@ export async function generateStaticParams() {
     const contents = await getAllContents();
     // 오픈 상태인 컨텐츠만 반환
     const openContents = contents.filter((content) => content.status === "오픈");
-    return openContents.map((content) => ({
+    const params = openContents.map((content) => ({
       id: content.id,
     }));
+    console.log(`generateStaticParams: ${params.length}개의 정적 페이지 생성`);
+    return params;
   } catch (error) {
     console.error("generateStaticParams error:", error);
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
+    // 빌드 실패를 방지하기 위해 빈 배열 반환
     return [];
   }
 }
 
 interface ContentDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }> | { id: string };
 }
 
 export default async function ContentDetailPage({ params }: ContentDetailPageProps) {
-  const { id } = await params;
-  
+  // Next.js 14.2.5에서는 params가 Promise일 수도 있고 아닐 수도 있음
+  const resolvedParams = params instanceof Promise ? await params : params;
+  const { id } = resolvedParams;
+
+  if (!id || typeof id !== "string") {
+    console.error("Invalid content ID:", id);
+    notFound();
+  }
+
   // QueryClient 생성 (서버 사이드)
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -43,10 +57,18 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
     // 컨텐츠 데이터 가져오기
     const contentData = await queryClient.fetchQuery({
       queryKey: ["read_margnet", id],
-      queryFn: () => getContentById(id),
+      queryFn: async () => {
+        try {
+          return await getContentById(id);
+        } catch (error) {
+          console.error("getContentById error:", error);
+          throw error;
+        }
+      },
     });
 
     if (!contentData) {
+      console.error("Content not found for ID:", id);
       notFound();
     }
 
@@ -56,11 +78,20 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
       try {
         notionData = await queryClient.fetchQuery({
           queryKey: ["notion", contentData.notion_url],
-          queryFn: () => getNotionPageContent(contentData.notion_url),
+          queryFn: async () => {
+            try {
+              return await getNotionPageContent(contentData.notion_url);
+            } catch (error) {
+              console.error("getNotionPageContent error:", error);
+              // Notion 데이터 가져오기 실패해도 페이지는 렌더링
+              return null;
+            }
+          },
         });
       } catch (error) {
         // Notion 데이터 가져오기 실패해도 페이지는 렌더링
         console.error("Notion 데이터 가져오기 실패:", error);
+        notionData = null;
       }
     }
 
@@ -78,6 +109,11 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
     );
   } catch (error) {
     console.error("ContentDetailPage error:", error);
+    // 에러 상세 정보 로깅
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
     notFound();
   }
 }
